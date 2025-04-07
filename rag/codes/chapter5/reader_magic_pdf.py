@@ -215,7 +215,7 @@ class UnionPdfReader(ReaderBase):
         docs = []
         if split_documents:
             for element in elements:
-                metadata = extra_info or {}
+                metadata = copy.deepcopy(extra_info) or {}
                 metadata["file_name"] = file.name
                 for k, v in element.items():
                     if k == "text":
