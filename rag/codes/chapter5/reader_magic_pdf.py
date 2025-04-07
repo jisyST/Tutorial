@@ -87,7 +87,7 @@ class UnionPdfReader(ReaderBase):
                     continue
                 block["type"] = content["type"]
                 block["page"] = content["page_idx"]
-                block["image_path"] = os.path.basename(content["img_path"])
+                block["image_path"] = content["img_path"]
                 block['img_caption'] = self._clean_content(content['img_caption'])
                 block['img_footnote'] = self._clean_content(content['img_footnote'])
                 if cur_title:
@@ -180,8 +180,6 @@ class UnionPdfReader(ReaderBase):
 
     def _pdf_parse_to_elements(self, pdf_path: Path):
         # args
-        image_dir = str(os.path.basename(self.image_save_path))
-
         os.makedirs(self.image_save_path, exist_ok=True)
 
         image_writer = FileBasedDataWriter(self.image_save_path)
@@ -206,7 +204,7 @@ class UnionPdfReader(ReaderBase):
 
         infer_result.get_infer_res()
 
-        content_list_content = pipe_result.get_content_list(image_dir)
+        content_list_content = pipe_result.get_content_list(self.image_save_path)
         return self._result_extract(content_list_content)
 
     def _load_data(self, file: Path, split_documents: Optional[bool] = True, extra_info=None, fs=None) -> List[DocNode]:
