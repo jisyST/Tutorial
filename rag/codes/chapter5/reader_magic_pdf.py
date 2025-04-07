@@ -60,7 +60,7 @@ class UnionPdfReader(ReaderBase):
             return [self._clean_content(t) for t in content]
         return content
 
-    def _result_extract(self, content_list):
+    def _result_extract(self, content_list):  # noqa: C901
         blocks = []
         cur_title = ""
         cur_level = -1
@@ -88,8 +88,10 @@ class UnionPdfReader(ReaderBase):
                 block["type"] = content["type"]
                 block["page"] = content["page_idx"]
                 block["image_path"] = content["img_path"]
-                block['img_caption'] = self._clean_content(content['img_caption'])
+                block['text'] = ''.join(self._clean_content(content['img_caption']))
                 block['img_footnote'] = self._clean_content(content['img_footnote'])
+                if not block['text']:
+                    continue
                 if cur_title:
                     block["title"] = cur_title
                 blocks.append(block)
