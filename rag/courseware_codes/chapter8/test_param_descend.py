@@ -16,8 +16,3 @@ def euclidean_distance(query: List[float], node: List[float], **kwargs) -> float
     point1 = np.array(query)
     point2 = np.array(node)
     return np.linalg.norm(point1 - point2)
-
-
-
-
-    

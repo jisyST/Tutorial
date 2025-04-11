@@ -43,32 +43,3 @@ func4 = lazyllm.tools.rag.register_similarity(tfidf_similarity, mode="text")
 ret = func2(query_e, node_e)
 print(ret)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,9 +21,3 @@ func2 = lazyllm.tools.rag.register_similarity(euclidean_distance, mode="embeddin
 
 ret = func1(query_e, node_e)
 print(ret)
-
-
-
-
-
-
