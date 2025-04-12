@@ -199,15 +199,18 @@ if __name__ == '__main__':
     parser.add_argument('--mode', type=str, default='local_infer',
                         choices=['online_infer', 'local_infer', 'local_train', 'score'],
                         help='Operation mode selection')
+    parser.add_argument('--build_dataset', action='store_true',
+                        help='Force rebuild dataset ignoring existing files')
     args = parser.parse_args()
 
     # Data path handling
-    train_data_path, eval_data_path = get_dataset(args.dataset_name)
+    train_data_path, eval_data_path = get_dataset(args.dataset_name, rebuild=args.build_dataset)
     train_data_path = args.train_data_path or train_data_path
     eval_data_path = args.train_data_path or eval_data_path
 
     # Execute main pipeline
-    main(args.model_path, args.mode, eval_data_path, train_data_path, args.eval_res_path)
+    if not args.build_dataset:
+        main(args.model_path, args.mode, eval_data_path, train_data_path, args.eval_res_path)
 
 
 # Example Usage Patterns:
@@ -222,3 +225,6 @@ if __name__ == '__main__':
 #
 # 4. Score Calculation Only:
 #    python sft_llm.py --mode="score" --eval_res_path="path/to/results.json"
+#
+# 5. Build Dataset:
+#    python sft_llm.py --build_dataset"
