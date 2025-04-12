@@ -194,6 +194,8 @@ def parse_args() -> argparse.Namespace:
                         help='Number of training epochs')
     parser.add_argument('--ngpus', type=int, default=4,
                         help='Number of GPUs for training')
+    parser.add_argument('--build_dataset', action='store_true',
+                        help='Build or Force rebuild the dataset even if it exists')
     return parser.parse_args()
 
 
@@ -206,6 +208,34 @@ def main(args: argparse.Namespace) -> None:
         test_size=args.test_size,
         seed=args.seed
     )
+    # Prepare dataset
+    if args.build_dataset:
+        print("Rebuilding dataset as requested...")
+        train_data_path, eval_data_path, kb_path = build_dataset_corpus(
+            instruction=args.instruction,
+            neg_num=args.neg_num,
+            test_size=args.test_size,
+            seed=args.seed
+        )
+        return
+    else:
+        train_path = os.path.join('dataset', 'train.json')
+        eval_path = os.path.join('dataset', 'eval.json')
+        kb_file = os.path.join('KB', 'knowledge_base.txt')
+
+        if all(os.path.exists(f) for f in [train_path, eval_path, kb_file]):
+            print("Using existing dataset files.")
+            train_data_path = train_path
+            eval_data_path = eval_path
+            kb_path = os.path.dirname(kb_file)
+        else:
+            print("Warning: Existing processed dataset not found. Building dataset...")
+            train_data_path, eval_data_path, kb_path = build_dataset_corpus(
+                instruction=args.instruction,
+                neg_num=args.neg_num,
+                test_size=args.test_size,
+                seed=args.seed
+            )
 
     # Deploy retrieval service
     retriever = deploy_serve(
@@ -243,9 +273,12 @@ if __name__ == '__main__':
 """
 Usage Examples:
 
+    # Build dataset with custom parameters
+    python sft_embed.py --build_dataset --neg_num 10 --test_size 0.1
+
     # Basic evaluation with default settings
-    python script.py
+    python sft_embed.py
 
     # Enable fine-tuning with custom parameters
-    python script.py --train_flag --embed_path bge-large-zh-v1.5 --num_epochs 2 --ngpus 4
+    python sft_embed.py --train_flag --embed_path bge-large-zh-v1.5 --num_epochs 2 --ngpus 4
 """
