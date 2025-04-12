@@ -202,13 +202,6 @@ def parse_args() -> argparse.Namespace:
 def main(args: argparse.Namespace) -> None:
     """Main execution pipeline."""
     # Prepare dataset
-    train_data_path, eval_data_path, kb_path = build_dataset_corpus(
-        instruction=args.instruction,
-        neg_num=args.neg_num,
-        test_size=args.test_size,
-        seed=args.seed
-    )
-    # Prepare dataset
     if args.build_dataset:
         print("Rebuilding dataset as requested...")
         train_data_path, eval_data_path, kb_path = build_dataset_corpus(
@@ -219,9 +212,10 @@ def main(args: argparse.Namespace) -> None:
         )
         return
     else:
-        train_path = os.path.join('dataset', 'train.json')
-        eval_path = os.path.join('dataset', 'eval.json')
-        kb_file = os.path.join('KB', 'knowledge_base.txt')
+        work_path = os.getcwd()
+        train_path = os.path.join(work_path, 'dataset', 'train.json')
+        eval_path = os.path.join(work_path, 'dataset', 'eval.json')
+        kb_file = os.path.join(work_path, 'KB', 'knowledge_base.txt')
 
         if all(os.path.exists(f) for f in [train_path, eval_path, kb_file]):
             print("Using existing dataset files.")
