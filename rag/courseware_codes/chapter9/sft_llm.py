@@ -206,7 +206,7 @@ if __name__ == '__main__':
     # Data path handling
     train_data_path, eval_data_path = get_dataset(args.dataset_name, rebuild=args.build_dataset)
     train_data_path = args.train_data_path or train_data_path
-    eval_data_path = args.train_data_path or eval_data_path
+    eval_data_path = args.eval_data_path or eval_data_path
 
     # Execute main pipeline
     if not args.build_dataset:
