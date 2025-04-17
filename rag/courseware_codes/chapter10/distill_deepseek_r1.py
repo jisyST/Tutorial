@@ -92,6 +92,8 @@ def caculate_score(eval_set, infer_set):
 def main(techer_name, student_name, dataset_name, demo=False, sft_data_path=None):
     # Launcher Teacher
     teacher_model = lazyllm.OnlineChatModule(techer_name)
+    teacher_model.prompt("You are a math problem solver. Provide the final "
+                         "answer in a boxed format using \\boxed\{answer\}.")
 
     # Load and Distill Dataset
     train_set_path, eval_set_path = get_dataset(dataset_name)
