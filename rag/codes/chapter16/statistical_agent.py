@@ -9,7 +9,7 @@ def build_statistical_agent():
     with pipeline() as sql_ppl:
         sql_ppl.formarter = lambda query: bi_tools.BI_PROMPT.format(query=query, image_path="./images") 
         sql_ppl.agent = ReactAgent(
-                llm=lazyllm.OnlineChatModule(source='deepseek', api_key="sk-89c4d6c9cfd3421da8e6c05a59696fbf" ,stream=False),
+                llm=lazyllm.OnlineChatModule(source='deepseek', stream=False),
                 tools=['run_code', 'run_sql_query'],
                 return_trace=True,
                 max_retries=3,
